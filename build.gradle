@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.19.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
+    // Cucumber JUnit 4 dependency
+    testImplementation 'io.cucumber:cucumber-java:7.15.0'  // Cucumber for Java
+    testImplementation 'io.cucumber:cucumber-junit:7.15.0'  // Cucumber JUnit integration
+
+
+    // Selenium dependencies
+    implementation 'org.seleniumhq.selenium:selenium-java:4.7.2'
+
+    // Appium Java client
+    implementation group: 'io.appium', name: 'java-client', version: '8.5.1'
+
+    // For Appium driver & Android support
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.19.0'
+    testImplementation 'io.qameta.allure:allure-junit4:2.19.0'        // Allure untuk JUnit 4
+
+}
+
+test {
+    useJUnit()
+//    systemProperty 'cucumber.features', 'classpath:features/calculator.feature'  // Tentukan lokasi file feature
+//    // Menonaktifkan log Cucumber untuk peringatan
+//    jvmArgs '-Dorg.slf4j.simpleLogger.log.io.cucumber=error'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+tasks.create("apiTask"){
+
+}
+
+allure {
+    version = '2.19.0'
+}
+
+
+tasks.withType(Test).configureEach {
+    systemProperty "allure.results.directory", "$buildDir/custom-allure-results"
+}
